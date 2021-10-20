@@ -1,6 +1,7 @@
 library(NGCHM)
 library(NGCHMSupportFiles)
 library(jsonlite)
+library(future)
 
 # Capture version and date information
 verFile <- ""
