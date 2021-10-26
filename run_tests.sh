@@ -14,7 +14,7 @@ echo "$cmd"
 if [[ $cmd == *"Wrote results to"* ]]; then
   echo "Test succesful!...."
 else
-  exit(1)
+  exit 1
 fi
 
 # Clean up
