@@ -58,7 +58,7 @@ ENV TZ=UTC
 
 COPY --from=build /usr/local /usr/local
 COPY --from=build /root/ShaidyMapGen.jar /usr/local/bin/
-ENV SHAIDYMAPGEN=/usr/local/bin/
+ENV SHAIDYMAPGEN=/usr/local/bin/ShaidyMapGen.jar
 
 COPY remotes.R /usr/local/bin/
 COPY installr /usr/local/bin/

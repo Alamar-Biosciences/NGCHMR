@@ -1,0 +1,4 @@
+sut:
+  build: .
+  dockerfile: Dockerfile.test
+  command: run_tests.sh

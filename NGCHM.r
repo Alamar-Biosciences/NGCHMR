@@ -19,17 +19,18 @@ if (file.exists(".git/refs/heads/main")){
 #
 # @param req JSON string, extract data matrix 
 # @return Returns ngchm file
+#* @serializer contentType list(type="application/octet-stream")
 #* @post /ngchm
-#* @get /ngchm
 function(req){
-  future({
+#  future({
     body <- jsonlite::fromJSON(req$postBody)
-    hm <- chmNew('temp', body$data)
+    hm <- chmNew('temp', as.matrix(body))
     tFile <- tempfile("NGCHMfile", fileext=".ngchm")
     chmExportToFile(hm, tFile)
-
+    bin <- readBin(tFile, "raw", n=file.info(tFile)$size)
+    file.remove(tFile)
     write("Finished generating NGCHM...", stdout())
-    return(include_file(tFile))
-  })
+    bin
+#  })
 }
 
