@@ -4,11 +4,10 @@
 set -e; #terminate script if any subscript returns an error
 
 # Test 1
-R --no-save < main.r &
+R --no-save < main.R &
 PID=$!
 sleep 5
 
-cmd=`curl --data-binary @test_data.txt http://localhost:8080/curvefit`
 cmd=`R --no-save < api_test.R`
 
 echo "$cmd"
