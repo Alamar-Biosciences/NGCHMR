@@ -6,7 +6,7 @@ set -e; #terminate script if any subscript returns an error
 # Test 1
 R --no-save < main.R &
 PID=$!
-sleep 5
+trap "kill $PID" EXIT;
 
 cmd=`R --no-save < api_test.R`
 
@@ -16,6 +16,3 @@ if [[ $cmd == *"Wrote results to"* ]]; then
 else
   exit 1
 fi
-
-# Clean up
-kill $PID;
