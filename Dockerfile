@@ -63,7 +63,7 @@ ENV SHAIDYMAPGEN=/usr/local/bin/ShaidyMapGen.jar
 COPY remotes.R /usr/local/bin/
 COPY installr /usr/local/bin/
 
-RUN apk add --no-cache apk-tools>2.10.7-r0 busybox=1.31.1-r20 musl-utils=1.1.24-r10
+RUN apk upgrade --no-cache apk-tools>2.10.7-r0 busybox>1.31.1-r20 musl-utils>1.1.24-r10
 RUN apk add --no-cache libgfortran xz-libs libcurl libpcrecpp libbz2 build-base gfortran    \
     pcre2 make readline bash linux-headers m4 libpng-dev tcl tk libx11 libxt curl-dev
 RUN apk add --no-cache --update-cache --repository http://nl.alpinelinux.org/alpine/v3.11/main \
