@@ -7,6 +7,7 @@ set -e; #terminate script if any subscript returns an error
 R --no-save < main.R &
 PID=$!
 trap "kill $PID" EXIT;
+sleep 3
 
 cmd=`R --no-save < api_test.R`
 
