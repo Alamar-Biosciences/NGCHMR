@@ -72,7 +72,7 @@ RUN apk add --no-cache --update-cache --repository http://nl.alpinelinux.org/alp
     autoconf=2.69-r2 automake=1.16.1-r0
 RUN apk add --no-cache git openjdk11 openssh 
 RUN installr plumber
-RUN installr jsonline
+#RUN installr jsonline
 RUN installr future
 RUN installr remotes
 RUN R -e "remotes::install_github('Alamar-Biosciences/tsvio', ref='stable')"

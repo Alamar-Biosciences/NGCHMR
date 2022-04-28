@@ -1,14 +1,12 @@
 #!/usr/bin/env Rscript
 # plumber.R
 library(httr)
-library(jsonlite)
 seed=TRUE
 options(stringsAsFactors=F)
 url <- "http://localhost:8000"
-data <- read.table("test_data.txt", sep="\t", header=T, row.names=1)
 raw.result <- POST(url=url, 
                    path="ngchm", 
-                   body=data, 
-                   encode ="json")
+                   body=list(data=upload_file("test_data.txt"), bcodeB=upload_file("bcodeB.txt"), bcodeA=upload_file("bcodeA.txt")), encode="multipart")
 writeBin((raw.result$content), "test.ngchm", useBytes=TRUE)
 write("Wrote results to 'test.nhchm'!", stdout())
+
