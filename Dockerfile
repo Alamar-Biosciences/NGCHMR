@@ -64,10 +64,11 @@ COPY remotes.R /usr/local/bin/
 COPY installr /usr/local/bin/
 
 RUN apk update
-RUN apk upgrade --no-cache apk-tools>2.10.7-r0 busybox>1.31.1-r20 musl-utils>1.1.24-r10
+RUN apk upgrade --no-cache apk-tools>2.10.7-r0 busybox>1.31.1-r22 musl-utils>1.1.24-r10 expat>2.2.10-r2 git>2.26.3-r1 gmp>6.2.1-r1 zlib>1.2.12-r0 ncurses>6.2_p20200523-r1
 RUN apk add --no-cache libgfortran xz-libs libcurl libpcrecpp libbz2 build-base gfortran    \
     pcre2 make readline bash linux-headers m4 libpng-dev tcl tk libx11 libxt curl-dev
 RUN apk add --no-cache libsodium-dev
+RUN apk upgrade --no-cache curl>7.79.1-r1 util-linux>2.37.3-r0 xz>5.2.5-r1
 RUN apk add --no-cache --update-cache --repository http://nl.alpinelinux.org/alpine/v3.11/main\
     autoconf=2.69-r2 automake=1.16.1-r0
 RUN apk add --no-cache git openjdk11 openssh 
