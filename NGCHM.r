@@ -2,6 +2,7 @@ library(NGCHM)
 library(NGCHMSupportFiles)
 library(future)
 library(mime)
+options(future.rng.onMisuse="ignore")
 
 # Capture version and date information
 verFile <- ""
@@ -23,7 +24,6 @@ if (file.exists(".git/refs/heads/main")){
 #* @post /ngchm
 function(req){
   future({
-    #body <- jsonlite::fromJSON(req$postBody)
   parsed <- parse_multipart(req)
   if (is.element("data", names(parsed))){
     mat <- read.table(parsed$data$datapath, sep='\t', comment.char='&', header=T, row.names=1)
@@ -31,7 +31,7 @@ function(req){
   else{
     write("Error: No data file provided, no NGCHM generated!",stdout())
   }
-  hm <- chmNew('temp', as.matrix(mat))
+  hm <- chmNew('temp', as.matrix(mat), rowDist='euclidean', colDist='euclidean', rowAgglom='average', colAgglom='average')
 
   if (is.element("bcodeB", names(parsed))){
     bcodeB <- read.table(parsed$bcodeB$datapath, sep='\t', comment.char='&', header=T, row.names=1)
