@@ -40,8 +40,14 @@ function(req){
       for(i in 2:length(name)){
         q <- bcodeB[, i]
         names(q) <- bcodeB[,1]
-        col <- chmNewCovariate(name[i], q )
-        hm <- chmAddCovariateBar(hm, 'column', col)
+        if (startsWith(name[i], "META.")){
+          metaName <- substr(name[i], 6, nchar(name[i]))
+          hm <- chmAddMetaData(hm, 'col', metaName, q)
+        }
+        else{
+          col <- chmNewCovariate(name[i], q )
+          hm <- chmAddCovariateBar(hm, 'column', col)
+        }
       }
     }
   }
@@ -50,10 +56,17 @@ function(req){
     name <- names(bcodeA)
     if (length(name) >= 2){
       for(i in 2:length(name)){
-        q <- bcodeA[, i]
-        names(q) <- bcodeA[,1]
-        row <- chmNewCovariate(name[i], q )
-        hm <- chmAddCovariateBar(hm, 'row', row)
+        q <- bcodeA[,i]
+        if (startsWith(name[i], "META.")){
+          names(q) <- rownames(mat)
+          metaName <- substr(name[i], 6, nchar(name[i]))
+          hm <- chmAddMetaData(hm, 'row', metaName, q)
+        }
+        else{
+          names(q) <- bcodeA[,1]
+          row <- chmNewCovariate(name[i], q )
+          hm <- chmAddCovariateBar(hm, 'row', row)
+        }
       }
     }
   }
