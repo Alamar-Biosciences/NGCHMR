@@ -1,10 +1,11 @@
 # set base image (hostOS)
 FROM alamarbiosciences/ngchmr
-EXPOSE 8000
+#EXPOSE 8000
 WORKDIR /workingDir
 COPY run_tests.sh ./
 COPY test_data.txt ./
 COPY bcodeB.txt ./
 COPY bcodeA.txt ./
+COPY api_test.R ./
 RUN apk update && apk add curl
 ENV PATH /workingDir:$PATH
