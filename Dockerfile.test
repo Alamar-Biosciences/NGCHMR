@@ -5,6 +5,5 @@ COPY run_tests.sh ./
 COPY test_data.txt ./
 COPY bcodeB.txt ./
 COPY bcodeA.txt ./
-COPY api_test.R ./
-#RUN apk update && apk add curl
+RUN apk update && apk add curl
 ENV PATH /workingDir:$PATH
