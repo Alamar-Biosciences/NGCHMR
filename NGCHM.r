@@ -45,8 +45,8 @@ function(req){
           hm <- chmAddMetaData(hm, 'col', metaName, q)
         }
         else{
-          col <- chmNewCovariate(name[i], q )
-          hm <- chmAddCovariateBar(hm, 'column', col)
+          col <- chmNewCovariate(name[i], q, type='discrete' )
+          hm <- chmAddCovariateBar(hm, 'column', col, thickness=as.integer(20))
         }
       }
     }
@@ -64,8 +64,8 @@ function(req){
         }
         else{
           names(q) <- bcodeA[,1]
-          row <- chmNewCovariate(name[i], q )
-          hm <- chmAddCovariateBar(hm, 'row', row)
+          row <- chmNewCovariate(name[i], q, type='discrete')
+          hm <- chmAddCovariateBar(hm, 'row', row, thickness=as.integer(20))
         }
       }
     }
