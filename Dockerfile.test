@@ -1,6 +1,6 @@
 # set base image (hostOS)
 FROM alamarbiosciences/ngchmr
-#EXPOSE 8000
+EXPOSE 8000
 WORKDIR /workingDir
 COPY run_tests.sh ./
 COPY test_data.txt ./
