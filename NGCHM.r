@@ -36,6 +36,7 @@ function(req){
   if (is.element("bcodeB", names(parsed))){
     bcodeB <- read.table(parsed$bcodeB$datapath, sep='\t', comment.char='&', header=T, row.names=1)
     name <- names(bcodeB)
+    usePlate <- 0
     if (length(name) >= 2){
       for(i in 2:length(name)){
         q <- bcodeB[, i]
@@ -43,6 +44,21 @@ function(req){
         if (startsWith(name[i], "META.")){
           metaName <- substr(name[i], 6, nchar(name[i]))
           hm <- chmAddMetaData(hm, 'col', metaName, q)
+        }
+        else if (startsWith(name[i], "AUTO.PLATE")){ # AUTO.PLATE must be specified before AUTO.WELL!
+          if (length(unique(q)) > 1){
+            tempName <- substr(name[i], 6, nchar(name[i]))
+            col <- chmNewCovariate(tempName, q, type='discrete' )
+            hm <- chmAddCovariateBar(hm, 'column', col, thickness=as.integer(20))
+            usePlate <- 1
+          }
+        }
+        else if(startsWith(name[i], "AUTO.WELL")){
+          if (usePlate == 1){
+            tempName <- substr(name[i], 6, nchar(name[i]))
+            col <- chmNewCovariate(tempName, q, type='discrete' )
+            hm <- chmAddCovariateBar(hm, 'column', col, thickness=as.integer(20))
+          }
         }
         else{
           col <- chmNewCovariate(name[i], q, type='discrete' )
