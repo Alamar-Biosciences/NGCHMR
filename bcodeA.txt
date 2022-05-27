@@ -1,4 +1,4 @@
-#Barcode	Name	Annotation1	META:bio.protein.uniprotid
+#Barcode	Name	Annotation1	META_bio.protein.uniprotid
 1	I00501	A	Q07325
 2	I00602	B	Q07325
 3	I0073	A	Q07325
