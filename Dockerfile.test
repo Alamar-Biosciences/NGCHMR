@@ -3,9 +3,12 @@ FROM alamarbiosciences/ngchmr
 EXPOSE 8000
 WORKDIR /workingDir
 COPY run_tests.sh ./
-COPY test_data.txt ./
-COPY bcodeB.txt ./
-COPY bcodeA.txt ./
-COPY api_test.R ./
+#COPY test_data.txt ./
+#COPY bcodeB.txt ./
+#COPY bcodeA.txt ./
+#COPY api_test.R ./
+COPY out_seqRepP.xml ./
+COPY 20220325_BarcodeA.txt ./
+COPY 20220325_BarcodeB.txt ./
 RUN apk update && apk add curl
 ENV PATH /workingDir:$PATH
