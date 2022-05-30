@@ -26,6 +26,10 @@ if (file.exists(".git/refs/heads/main")){
 function(req){
   future({
   parsed <- parse_multipart(req)
+  methodName = "IC"
+  if (is.element("method", names(parsed))){
+    methodName <- parsed$method
+  } 
   if (is.element("data", names(parsed))){
     data <- read_xml(parsed$data$datapath)
     root <- xml_root(data)
@@ -59,7 +63,6 @@ function(req){
     }
 
     # Read the actual data for the heatmap
-    methodName = "IC"
     storage = as.data.frame(matrix(nrow=length(unique(BarcodeA$Target)), ncol=length(unique(BarcodeB$Sample))))
     colnames(storage) = unique(BarcodeB$Sample)
     rownames(storage) = unique(BarcodeA$Target)
