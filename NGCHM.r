@@ -3,6 +3,7 @@ library(NGCHMSupportFiles)
 library(future)
 library(mime)
 library(xml2)
+library(colorspace)
 options(future.rng.onMisuse="ignore")
 
 # Capture version and date information
@@ -102,6 +103,9 @@ function(req){
     for(i in 2:length(name)){
       q <- bcodeB[, i]
       names(q) <- bcodeB[,1]
+      cols <- qualitative_hcl(length(unique(bcodeB[,i])), palette="Dynamic")
+      vals <- unique(bcodeB[,i])
+      cMap <- chmNewColorMap(vals, cols)
       if (startsWith(name[i], "META_")){
         metaName <- substr(name[i], 6, nchar(name[i]))
         hm <- chmAddMetaData(hm, 'col', metaName, q)
@@ -109,17 +113,17 @@ function(req){
       else if (startsWith(name[i], "AUTO_PLATE")){ # AUTO.PLATE must be specified before AUTO.WELL!
         if (length(unique(q)) > 1){
           tempName <- substr(name[i], 6, nchar(name[i]))
-          col <- chmNewCovariate(tempName, q, type='discrete' )
+          col <- chmNewCovariate(tempName, q, type='discrete', cMap)
           hm <- chmAddCovariateBar(hm, 'column', col, thickness=as.integer(20))
         }
       }
       else if(startsWith(name[i], "AUTO_WELL")){
         tempName <- substr(name[i], 6, nchar(name[i]))
-        col <- chmNewCovariate(tempName, q, type='discrete' )
+        col <- chmNewCovariate(tempName, q, type='discrete', cMap)
         hm <- chmAddCovariateBar(hm, 'column', col, thickness=as.integer(20))
       }
       else{
-        col <- chmNewCovariate(name[i], q, type='discrete' )
+        col <- chmNewCovariate(name[i], q, type='discrete', cMap )
         hm <- chmAddCovariateBar(hm, 'column', col, thickness=as.integer(20))
       }
     }
@@ -137,6 +141,9 @@ function(req){
   if (length(name) >= 2){
     for(i in 2:length(name)){
       q <- bcodeA[,i]
+      cols <- qualitative_hcl(length(unique(bcodeA[,i])), palette="Dynamic")
+      vals <- unique(bcodeA[,i])
+      cMap <- chmNewColorMap(vals, cols)
       if (startsWith(name[i], "META_")){
         names(q) <- bcodeA[,1]
         metaName <- substr(name[i], 6, nchar(name[i]))
@@ -144,7 +151,7 @@ function(req){
       }
       else{
         names(q) <- bcodeA[, 1]
-        row <- chmNewCovariate(name[i], q, type='discrete')
+        row <- chmNewCovariate(name[i], q, type='discrete', cMap)
         hm <- chmAddCovariateBar(hm, 'row', row, thickness=as.integer(20))
       }
     }

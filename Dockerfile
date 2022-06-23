@@ -77,6 +77,7 @@ RUN installr plumber
 RUN installr future
 RUN installr remotes
 RUN installr xml2
+RUN installr colorspace
 RUN R -e "remotes::install_github('Alamar-Biosciences/tsvio', ref='stable')"
 RUN R -e "remotes::install_github('Alamar-Biosciences/NGCHM-R', ref='stable')"
 RUN R -e "remotes::install_github('Alamar-Biosciences/NGCHMSupportFiles', ref='main')"
