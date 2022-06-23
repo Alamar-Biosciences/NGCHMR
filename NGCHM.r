@@ -138,7 +138,7 @@ function(req){
     for(i in 2:length(name)){
       q <- bcodeA[,i]
       if (startsWith(name[i], "META_")){
-        names(q) <- name
+        names(q) <- bcodeA[,1]
         metaName <- substr(name[i], 6, nchar(name[i]))
         hm <- chmAddMetaData(hm, 'row', metaName, q)
       }
