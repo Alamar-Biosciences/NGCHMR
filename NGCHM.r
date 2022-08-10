@@ -16,6 +16,19 @@ if (file.exists(".git/refs/heads/main")){
   verFile <- "/workingDir/main"
 }
 
+# Upload the XML file and output an RDS for storage
+#
+# API entry point
+#
+# @param req JSON string
+# @return Returns an RDS file
+#* @serializer contentType list(type="application/octet-stream")
+#* @post /rds
+function(req){
+  # import the XML loading script here and return an rds file
+  write("Finished generating RDS file...", stdout())
+}
+
 # Upload a protein expression file and return a NGCHM for use by daemon
 #
 # API entry point
