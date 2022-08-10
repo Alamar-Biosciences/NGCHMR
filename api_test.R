@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 # plumber.R
 library(httr)
-seed=TRUE
+ seed=TRUE
 options(stringsAsFactors=F)
 url <- "http://localhost:8000"
 # bcodeA and bcodeB are optional in this POST request
