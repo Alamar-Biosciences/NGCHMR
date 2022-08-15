@@ -145,7 +145,10 @@ function(req){
   # BarcodeA / Targets / Covariates processing 
   if (is.element("bcodeA", names(parsed))){
     bcodeA <- read.table(parsed$bcodeA$datapath, sep='\t', comment.char='&', header=T, row.names=1) 
-    name <- names(bcodeA)
+    name <- names(paste(bcodeA[,1], "_", bcodeA[,2]))
+    bcodeA <- bcodeA[,-2]
+    bcodeA[,1] <- name
+    
   }
   else{
     name <-names(BarcodeA)[2:ncol(BarcodeA)]
