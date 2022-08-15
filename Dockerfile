@@ -64,7 +64,7 @@ COPY remotes.R /usr/local/bin/
 COPY installr /usr/local/bin/
 
 RUN apk update
-RUN apk upgrade --no-cache apk-tools>2.10.7-r0 busybox>1.31.1-r22 musl-utils>1.1.24-r10 expat>2.2.10-r2 git>2.26.3-r1 gmp>6.2.1-r1 zlib>1.2.12-r0 ncurses>6.2_p20200523-r1
+RUN apk upgrade --no-cache apk-tools>2.10.7-r0 busybox>1.31.1-r22 musl-utils>1.1.24-r10 expat>2.2.10-r2 git>2.26.3-r1 gmp>6.2.1-r1 zlib>1.2.12-r2 ncurses>6.2_p20200523-r1
 RUN apk add --no-cache libgfortran xz-libs libcurl libpcrecpp libbz2 build-base gfortran    \
     pcre2 make readline bash linux-headers m4 libpng-dev tcl tk libx11 libxt curl-dev libxml2-dev
 RUN apk add --no-cache libsodium-dev
