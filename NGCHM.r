@@ -105,8 +105,8 @@ function(req){
 
   # BarcodeB / Targets / Covariates processing 
   if (is.element("bcodeB", names(parsed))){
-    bcodeB <- read.table(parsed$bcodeB$datapath, sep='\t', comment.char='&', header=T, row.names=1)
-    name <- names(bcodeB)
+    bcodeB <- read.table(parsed$bcodeB$datapath, sep='\t', comment.char='&', header=T, row.names=1, na.strings="xxxxx")
+    name <- colnames(bcodeB)
   }
   else{
     name <-names(BarcodeB)[2:ncol(BarcodeB)]
@@ -144,10 +144,8 @@ function(req){
  
   # BarcodeA / Targets / Covariates processing 
   if (is.element("bcodeA", names(parsed))){
-    bcodeA <- read.table(parsed$bcodeA$datapath, sep='\t', comment.char='&', header=T, row.names=1) 
-    name <- names(paste(bcodeA[,1], "_", bcodeA[,2]))
-    bcodeA <- bcodeA[,-2]
-    bcodeA[,1] <- name
+    bcodeA <- read.table(parsed$bcodeA$datapath, sep='\t', comment.char='&', header=T, row.names=1, na.strings="XXXXX") 
+    name <- names(bcodeA)
     
   }
   else{
