@@ -40,7 +40,11 @@ function(req){
 function(req){
   future({
   parsed <- parse_multipart(req)
-  methodName = "IC"
+  methodName = "IC";
+  keepControls <- FALSE;
+  if (is.element("keepControls", names(parsed))){
+    keepControls <- TRUE;
+  }
   if (is.element("method", names(parsed))){
     methodName <- parsed$method
   } 
@@ -66,8 +70,10 @@ function(req){
     x <- NULL; y <- NULL;
     for (barcodeB in xml_find_all(root, ".//BarcodeB")){
       for (bcodeB in xml_find_all(barcodeB, ".//Barcode")){
-        x <- if(is.null(x)) xml_attrs(bcodeB) else rbind(x, xml_attrs(bcodeB))
-        y <- if(is.null(y)) xml_text(bcodeB) else  rbind(y, xml_text(bcodeB))
+        if (keepControls || (!grepl("NegativeControl", xml_text(bcodeB)) && !grepl("InterPlateControl", xml_text(bcodeB)))){
+          x <- if(is.null(x)) xml_attrs(bcodeB) else rbind(x, xml_attrs(bcodeB))
+          y <- if(is.null(y)) xml_text(bcodeB)  else rbind(y, xml_text(bcodeB))
+        }
       }
       colnames(y) <- "Sample"
       BarcodeB <- if (ncol(x) == 1) cbind(x, y) else cbind(x[, 1], y, x[, 2:ncol(x)])
@@ -81,7 +87,6 @@ function(req){
     colnames(storage) = unique(BarcodeB$Sample)
     rownames(storage) = unique(BarcodeA$Target)
     for (sample in xml_find_all(root, ".//Sample")){
-      samName <- xml_attr(sample, 'name')
       col <- which(colnames(storage) == xml_attr(sample, 'name'))
       for (combined in xml_find_all(sample, ".//Combined")){ # "Combined" - Sample, or "Replicate"
         for (method in xml_find_all(combined, ".//Method")){
