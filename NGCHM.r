@@ -168,6 +168,11 @@ function(req){
         metaName <- substr(name[i], 6, nchar(name[i]))
         hm <- chmAddMetaData(hm, 'row', metaName, q)
       }
+      else if(startsWith(name[i], "UniprotID")){
+        names(q) <- bcodeA[,1]
+        hm <- chmAddMetaData(hm, 'row', "bio.protein.uniprotid", q)
+        
+      }
       else{
         names(q) <- bcodeA[, 1]
         row <- chmNewCovariate(name[i], q, type='discrete', cMap)
