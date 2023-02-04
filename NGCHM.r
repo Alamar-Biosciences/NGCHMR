@@ -46,6 +46,7 @@ function(req){
 #* @param colDist
 #* @param rowAgglom
 #* @param colAgglom
+#* @serializer contentType list(type="application/octet-stream")
 #* @post /ngchm
 ngchm <- function(data, method="IC", keepControls=FALSE, bcodeBin="", bcodeAin="", 
                   IPC=c('InterPlateControl'), NC=c('NegativeControl'), IC=c('mCherry'),
