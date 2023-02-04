@@ -16,6 +16,17 @@ if (file.exists(".git/refs/heads/main")){
   verFile <- "/workingDir/main"
 }
 
+#* To check the health of the API server, do nothing -> Returns Ok
+#*
+#* @get /healthCheck
+#* @serializer contentType list(type="text/plain; charset=UTF-8")
+function(res){
+  future({
+    res$status <- 200
+    return("Ok")
+    })
+}
+
 # Upload the XML file and output an RDS for storage
 #
 # API entry point
