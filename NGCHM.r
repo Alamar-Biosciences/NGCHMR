@@ -49,8 +49,8 @@ function(req){
 #* @param data:file
 #* @param method
 #* @param keepControls
-#* @param bcodeBin:file
-#* @param bcodeAin:file
+#* @param bcodeB:file
+#* @param bcodeA:file
 #* @param IPC
 #* @param NC
 #* @param rowDist
@@ -59,7 +59,7 @@ function(req){
 #* @param colAgglom
 #* @serializer contentType list(type="application/octet-stream")
 #* @post /ngchm
-ngchm <- function(data, method="IC", keepControls=FALSE, bcodeBin="", bcodeAin="", 
+ngchm <- function(data, method="IC", keepControls=FALSE, bcodeB="", bcodeA="", 
                   IPC=c('InterPlateControl'), NC=c('NegativeControl'), IC=c('mCherry'),
                   rowDist='euclidean', colDist='euclidean', rowAgglom='average', colAgglom='average'){
   future({
@@ -68,9 +68,9 @@ ngchm <- function(data, method="IC", keepControls=FALSE, bcodeBin="", bcodeAin="
   # Read BarcodeAs
   x <- NULL; y <- NULL;
   for (barcodeA in xml_find_all(root, ".//BarcodeA")){
-    for (bcodeA in xml_find_all(barcodeA, ".//Barcode")){
-      x <- if(is.null(x)) xml_attrs(bcodeA) else rbind(x, xml_attrs(bcodeA))
-      y <- if(is.null(y)) xml_text(bcodeA) else  rbind(y, xml_text(bcodeA))
+    for (bcode_A in xml_find_all(barcodeA, ".//Barcode")){
+      x <- if(is.null(x)) xml_attrs(bcode_A) else rbind(x, xml_attrs(bcode_A))
+      y <- if(is.null(y)) xml_text(bcode_A) else  rbind(y, xml_text(bcode_A))
     }
     colnames(y) <- "Target"
     BarcodeA <- if (ncol(x) == 1) cbind(x, y) else cbind(x[, 1], y, x[, 2:ncol(x)])
@@ -82,10 +82,10 @@ ngchm <- function(data, method="IC", keepControls=FALSE, bcodeBin="", bcodeAin="
   # Read BarcodeBs
   x <- NULL; y <- NULL;
   for (barcodeB in xml_find_all(root, ".//BarcodeB")){
-    for (bcodeB in xml_find_all(barcodeB, ".//Barcode")){
-      if (keepControls || (!grepl(paste(NC, collapse="|"), xml_text(bcodeB)) && !grepl(paste(IPC, collapse="|"), xml_text(bcodeB)))){
-        x <- if(is.null(x)) xml_attrs(bcodeB) else rbind(x, xml_attrs(bcodeB))
-        y <- if(is.null(y)) xml_text(bcodeB)  else rbind(y, xml_text(bcodeB))
+    for (bcode_B in xml_find_all(barcodeB, ".//Barcode")){
+      if (keepControls || (!grepl(paste(NC, collapse="|"), xml_text(bcode_B)) && !grepl(paste(IPC, collapse="|"), xml_text(bcode_B)))){
+        x <- if(is.null(x)) xml_attrs(bcode_B) else rbind(x, xml_attrs(bcode_B))
+        y <- if(is.null(y)) xml_text(bcode_B)  else rbind(y, xml_text(bcode_B))
       }
     }
     colnames(y) <- "Sample"
@@ -118,20 +118,20 @@ ngchm <- function(data, method="IC", keepControls=FALSE, bcodeBin="", bcodeAin="
   hm <- chmNew('temp', as.matrix(storage), rowDist=rowDist, colDist=colDist, rowAgglom=rowAgglom, colAgglom=colAgglom)
 
   # BarcodeB / Targets / Covariates processing 
-  if (bcodeBin != ""){
-    bcodeB <- read.table(text=toString(bcodeBin), sep='\t', comment.char='&', header=T, row.names=1, na.strings=c())
-    name <- colnames(bcodeB)
+  if (bcodeB != ""){
+    bcode_B <- read.table(text=toString(bcodeB), sep='\t', comment.char='&', header=T, row.names=1, na.strings=c())
+    name <- colnames(bcode_B)
   }
   else{
     name <-names(BarcodeB)[2:ncol(BarcodeB)]
-    bcodeB <- BarcodeB[, 2:ncol(BarcodeB)]
+    bcode_B <- BarcodeB[, 2:ncol(BarcodeB)]
   }
   if (length(name) >= 2){
     for(i in 2:length(name)){
-      q <- bcodeB[, i]
-      names(q) <- bcodeB[,1]
-      cols <- qualitative_hcl(length(unique(bcodeB[,i])), palette="Dynamic")
-      vals <- unique(bcodeB[,i])
+      q <- bcode_B[, i]
+      names(q) <- bcode_B[,1]
+      cols <- qualitative_hcl(length(unique(bcode_B[,i])), palette="Dynamic")
+      vals <- unique(bcode_B[,i])
       cMap <- chmNewColorMap(vals, cols)
       if (startsWith(name[i], "META_")){
         metaName <- substr(name[i], 6, nchar(name[i]))
@@ -157,33 +157,33 @@ ngchm <- function(data, method="IC", keepControls=FALSE, bcodeBin="", bcodeAin="
   }
  
   # BarcodeA / Targets / Covariates processing 
-  if (bcodeAin != ""){
-    bcodeA <- read.table(text=toString(bcodeAin), sep='\t', comment.char='&', header=T, row.names=1, na.strings=c()) 
-    name <- names(bcodeA)
+  if (bcodeA != ""){
+    bcode_A <- read.table(text=toString(bcodeA), sep='\t', comment.char='&', header=T, row.names=1, na.strings=c()) 
+    name <- names(bcode_A)
     
   }
   else{
     name <-names(BarcodeA)[2:ncol(BarcodeA)]
-    bcodeA <- BarcodeA[, 2:ncol(BarcodeA)]
+    bcode_A <- BarcodeA[, 2:ncol(BarcodeA)]
   }
   if (length(name) >= 2){
     for(i in 2:length(name)){
-      q <- bcodeA[,i]
-      cols <- qualitative_hcl(length(unique(bcodeA[,i])), palette="Dynamic")
-      vals <- unique(bcodeA[,i])
+      q <- bcode_A[,i]
+      cols <- qualitative_hcl(length(unique(bcode_A[,i])), palette="Dynamic")
+      vals <- unique(bcode_A[,i])
       cMap <- chmNewColorMap(vals, cols)
       if (startsWith(name[i], "META_")){
-        names(q) <- bcodeA[,1]
+        names(q) <- bcode_A[,1]
         metaName <- substr(name[i], 6, nchar(name[i]))
         hm <- chmAddMetaData(hm, 'row', metaName, q)
       }
       else if(startsWith(name[i], "UniprotID")){
-        names(q) <- bcodeA[,1]
+        names(q) <- bcode_A[,1]
         hm <- chmAddMetaData(hm, 'row', "bio.protein.uniprotid", q)
         
       }
       else{
-        names(q) <- bcodeA[, 1]
+        names(q) <- bcode_A[, 1]
         row <- chmNewCovariate(name[i], q, type='discrete', cMap)
         hm <- chmAddCovariateBar(hm, 'row', row, thickness=as.integer(20))
       }
