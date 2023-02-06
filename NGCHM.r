@@ -1,6 +1,7 @@
 library(NGCHM)
 library(NGCHMSupportFiles)
 library(future)
+library(promises)
 library(mime)
 library(xml2)
 library(colorspace)
@@ -62,7 +63,7 @@ function(req){
 ngchm <- function(data, method="IC", keepControls=FALSE, bcodeB="", bcodeA="", 
                   IPC=c('InterPlateControl'), NC=c('NegativeControl'), IC=c('mCherry'),
                   rowDist='euclidean', colDist='euclidean', rowAgglom='average', colAgglom='average'){
-  future({
+  future_promise({
   root <- xml_root(read_xml(toString(data)))
 
   # Read BarcodeAs
