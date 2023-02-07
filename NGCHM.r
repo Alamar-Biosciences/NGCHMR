@@ -54,15 +54,17 @@ function(req){
 #* @param bcodeA:file BarcodeA file
 #* @param IPC
 #* @param NC
-#* @param rowDist Distance metric for row clustering [euclidean, maximum, manhattan, canberra, binary, minkowski, correlation, cosine, alphabetic]
-#* @param colDist Distance metric for column clustering [euclidean, maximum, manhattan, canberra, binary, minkowski, correlation, cosine, alphabetic]
-#* @param rowAgglom Row agglomeration method (ignored if rowDist is alphabetic) [average, complete, ward.D, ward.D2, single, mcquitty, median, centroid]
-#* @param colAgglom Column agglomieration method (ignored if colDist is alphabetic) [average, complete, ward.D, ward.D2, single, mcquitty, median, centroid]
+#* @param rowOrder Custom Row order
+#* @param colOrder Custom Column order
+#* @param rowDist Distance metric for row clustering (ignored if rowOrder is specified) [euclidean, maximum, manhattan, canberra, binary, minkowski, correlation, cosine]
+#* @param colDist Distance metric for column clustering (ignored if colOrder is specified[euclidean, maximum, manhattan, canberra, binary, minkowski, correlation, cosine]
+#* @param rowAgglom Row agglomeration method (ignored if rowOrder is specified) [average, complete, ward.D, ward.D2, single, mcquitty, median, centroid]
+#* @param colAgglom Column agglomieration method (ignored if colOrder is specified) [average, complete, ward.D, ward.D2, single, mcquitty, median, centroid]
 #* @serializer contentType list(type="application/octet-stream")
 #* @post /ngchm
 ngchm <- function(data, method="IC", keepControls=FALSE, bcodeB="", bcodeA="", 
                   IPC=c('InterPlateControl'), NC=c('NegativeControl'), IC=c('mCherry'),
-                  rowDist='euclidean', colDist='euclidean', rowAgglom='average', colAgglom='average'){
+                  rowDist='euclidean', colDist='euclidean', rowAgglom='average', colAgglom='average', rowOrder="", colOrder=""){
   future_promise({
   Sys.setenv(SHAIDYMAPGEN=shaidy)
   root <- xml_root(read_xml(toString(data)))
@@ -118,12 +120,12 @@ ngchm <- function(data, method="IC", keepControls=FALSE, bcodeB="", bcodeA="",
 
   # Create the heatmap
   hm <- NULL
-  if(rowDist == "alphabetic" && colDist != "alphabetic"){
-    hm <- chmNew('temp', as.matrix(storage), rowOrder=sort(rownames(storage)), colDist=colDist,  colAgglom=colAgglom)
-  }else if (rowDist != "alphabetic" && colDist == "alphabetic"){
-    hm <- chmNew('temp', as.matrix(storage), rowDist=rowDist, colOrder=sort(colnames(storage)), rowAgglom=rowAgglom)
-  }else if (rowDist == "alphabetic" && colDist == "alphabetic"){
-    hm <- chmNew('temp', as.matrix(storage), rowOrder=sort(rownames(storage)), colOrder=sort(colnames(storage)))
+  if(rowOrder == "" && colOrder != ""){
+    hm <- chmNew('temp', as.matrix(storage), colOrder=colOrder, rowDist=rowDist, rowAgglom=rowAgglom)
+  }else if (rowOrder != "" && colOrder == ""){
+    hm <- chmNew('temp', as.matrix(storage), rowOrder=rowOrder, colDist=colDist, colAgglom=colAgglom)
+  }else if (rowOrder != "" && colOrder != ""){
+    hm <- chmNew('temp', as.matrix(storage), rowOrder=rowOrder, colOrder=colOrder)
   }else{
     hm <- chmNew('temp', as.matrix(storage), rowDist=rowDist, colDist=colDist, rowAgglom=rowAgglom, colAgglom=colAgglom)
   }

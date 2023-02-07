@@ -9,7 +9,7 @@ Rscript --vanilla main.R $PORT &
 #docker run --rm -p 8000:8000 --rm -a stderr -a stdout -v "${PWD}:${PWD}" -w "${PWD}" ngchmr &
 PID=$!
 trap "kill $PID" EXIT;
-sleep 5
+sleep 7
 
 # Test 1: plot IC data 
 #cmd=`R --no-save < api_test.R`
