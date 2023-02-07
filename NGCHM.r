@@ -6,7 +6,7 @@ library(mime)
 library(xml2)
 library(colorspace)
 options(future.rng.onMisuse="ignore")
-
+shaidy <- Sys.getenv("SHAIDYMAPGEN")
 # Capture version and date information
 verFile <- ""
 if (file.exists(".git/refs/heads/main")){
@@ -64,6 +64,7 @@ ngchm <- function(data, method="IC", keepControls=FALSE, bcodeB="", bcodeA="",
                   IPC=c('InterPlateControl'), NC=c('NegativeControl'), IC=c('mCherry'),
                   rowDist='euclidean', colDist='euclidean', rowAgglom='average', colAgglom='average'){
   future_promise({
+  Sys.setenv(SHAIDYMAPGEN=shaidy)
   root <- xml_root(read_xml(toString(data)))
 
   # Read BarcodeAs
