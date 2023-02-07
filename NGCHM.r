@@ -47,17 +47,17 @@ function(req){
 #
 # @param req JSON string, extract data matrix 
 # @return Returns ngchm file
-#* @param data:file
-#* @param method
+#* @param data:file XML input file
+#* @param method Normalization Method [IC, raw] 
 #* @param keepControls
-#* @param bcodeB:file
-#* @param bcodeA:file
+#* @param bcodeB:file BarcodeB file
+#* @param bcodeA:file BarcodeA file
 #* @param IPC
 #* @param NC
-#* @param rowDist
-#* @param colDist
-#* @param rowAgglom
-#* @param colAgglom
+#* @param rowDist Distance metric for row clustering [euclidean, maximum, manhattan, canberra, binary, minkowski, correlation, cosine, alphabetic]
+#* @param colDist Distance metric for column clustering [euclidean, maximum, manhattan, canberra, binary, minkowski, correlation, cosine, alphabetic]
+#* @param rowAgglom Row agglomeration method (ignored if rowDist is alphabetic) [average, complete, ward.D, ward.D2, single, mcquitty, median, centroid]
+#* @param colAgglom Column agglomieration method (ignored if colDist is alphabetic) [average, complete, ward.D, ward.D2, single, mcquitty, median, centroid]
 #* @serializer contentType list(type="application/octet-stream")
 #* @post /ngchm
 ngchm <- function(data, method="IC", keepControls=FALSE, bcodeB="", bcodeA="", 
@@ -117,7 +117,16 @@ ngchm <- function(data, method="IC", keepControls=FALSE, bcodeB="", bcodeA="",
   }
 
   # Create the heatmap
-  hm <- chmNew('temp', as.matrix(storage), rowDist=rowDist, colDist=colDist, rowAgglom=rowAgglom, colAgglom=colAgglom)
+  hm <- NULL
+  if(rowDist == "alphabetic" && colDist != "alphabetic"){
+    hm <- chmNew('temp', as.matrix(storage), rowOrder=sort(rownames(storage)), colDist=colDist,  colAgglom=colAgglom)
+  }else if (rowDist != "alphabetic" && colDist == "alphabetic"){
+    hm <- chmNew('temp', as.matrix(storage), rowDist=rowDist, colOrder=sort(colnames(storage)), rowAgglom=rowAgglom)
+  }else if (rowDist == "alphabetic" && colDist == "alphabetic"){
+    hm <- chmNew('temp', as.matrix(storage), rowOrder=sort(rownames(storage)), colOrder=sort(colnames(storage)))
+  }else{
+    hm <- chmNew('temp', as.matrix(storage), rowDist=rowDist, colDist=colDist, rowAgglom=rowAgglom, colAgglom=colAgglom)
+  }
 
   # BarcodeB / Targets / Covariates processing 
   if (bcodeB != ""){

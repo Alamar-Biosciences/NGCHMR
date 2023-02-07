@@ -6,6 +6,7 @@ set -e; #terminate script if any subscript returns an error
 # Set up the server for testing
 PORT=8000
 Rscript --vanilla main.R $PORT &
+#docker run --rm -p 8000:8000 --rm -a stderr -a stdout -v "${PWD}:${PWD}" -w "${PWD}" ngchmr &
 PID=$!
 trap "kill $PID" EXIT;
 sleep 5
