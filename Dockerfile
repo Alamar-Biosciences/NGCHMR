@@ -78,6 +78,7 @@ RUN installr future
 RUN installr remotes
 RUN installr xml2
 RUN installr colorspace
+RUN installr fastmap
 RUN R -e "remotes::install_github('Alamar-Biosciences/tsvio', ref='stable')"
 RUN R -e "remotes::install_github('Alamar-Biosciences/NGCHM-R', ref='stable')"
 RUN R -e "remotes::install_github('Alamar-Biosciences/NGCHMSupportFiles', ref='main')"

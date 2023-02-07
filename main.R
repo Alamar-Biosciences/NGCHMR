@@ -1,5 +1,6 @@
 #!/usr/bin/env Rscript
 library(plumber)
+library(fastmap)
 library(future)
 plan(cluster, workers=2) # do not use multicore (possible garbage collection issue)
 args = commandArgs(trailingOnly=T)
