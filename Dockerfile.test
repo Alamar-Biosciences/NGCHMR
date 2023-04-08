@@ -8,6 +8,9 @@ COPY run_tests.sh ./
 #COPY bcodeA.txt ./
 #COPY api_test.R ./
 COPY out_seqRepP.xml ./
+COPY defaultBarcodeA.txt ./
+COPY defaultBarcodeB.txt ./
+COPY outputnorm.xml ./
 COPY 20220325_BarcodeA.txt ./
 COPY 20220325_BarcodeB.txt ./
 RUN apk update && apk add curl
