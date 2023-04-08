@@ -105,7 +105,7 @@ ngchm <- function(data, method="IC", keepControls=FALSE, bcodeB="", bcodeA="",
   rownames(storage) = unique(BarcodeA$Target)
   for (sample in xml_find_all(root, ".//Sample")){
     col <- which(colnames(storage) == xml_attr(sample, 'name'))
-    for (combined in xml_find_all(sample, ".//Combined")){ # "Combined" - Sample, or "Replicate"
+    for (combined in xml_find_all(sample, ".//Replicate")){ # "Combined" - Sample, or "Replicate"
       for (method2 in xml_find_all(combined, ".//Method")){
         if(xml_attr(method2, 'name') == method){ # "raw", "IC", or "TC"
           for(target in xml_find_all(method2, ".//Target")){
@@ -142,27 +142,24 @@ ngchm <- function(data, method="IC", keepControls=FALSE, bcodeB="", bcodeA="",
   if (length(name) >= 2){
     for(i in 2:length(name)){
       q <- bcode_B[, i]
-      names(q) <- bcode_B[,1]
+      names(q) <- make.unique(bcode_B[,1])
       cols <- qualitative_hcl(length(unique(bcode_B[,i])), palette="Dynamic")
       vals <- unique(bcode_B[,i])
       cMap <- chmNewColorMap(vals, cols)
       if (startsWith(name[i], "META_")){
         metaName <- substr(name[i], 6, nchar(name[i]))
         hm <- chmAddMetaData(hm, 'col', metaName, q)
-      }
-      else if (startsWith(name[i], "AUTO_PLATE")){ # AUTO.PLATE must be specified before AUTO.WELL!
+      } else if (startsWith(name[i], "AUTO_PLATE")){ # AUTO.PLATE must be specified before AUTO.WELL!
         if (length(unique(q)) > 1){
           tempName <- substr(name[i], 6, nchar(name[i]))
           col <- chmNewCovariate(tempName, q, type='discrete', cMap)
           hm <- chmAddCovariateBar(hm, 'column', col, thickness=as.integer(20))
         }
-      }
-      else if(startsWith(name[i], "AUTO_WELL")){
+      } else if(startsWith(name[i], "AUTO_WELL")){
         tempName <- substr(name[i], 6, nchar(name[i]))
         col <- chmNewCovariate(tempName, q, type='discrete', cMap)
         hm <- chmAddCovariateBar(hm, 'column', col, thickness=as.integer(20))
-      }
-      else{
+      } else{
         col <- chmNewCovariate(name[i], q, type='discrete', cMap )
         hm <- chmAddCovariateBar(hm, 'column', col, thickness=as.integer(20))
       }

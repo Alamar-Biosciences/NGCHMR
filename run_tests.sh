@@ -52,4 +52,13 @@ if (( `stat -c%s out1.ngchm` < 1024 )); then
   echo "Test 5 failed!";
   exit 1
 fi
+
+# Test 6: 
+echo -e "\n\nRunning Test 6:";
+cmd=`curl -X POST "http://localhost:$PORT/ngchm?method=IC&IPC=Sample1&NC=Sample2&rowDist=euclidean&colDist=euclidean&rowAgglom=average&colAgglom=average&IC=Mcherry_TI00004" -H "accept: application/octet-stream" -H "Content-Type: multipart/form-data" -F "data=@outputnorm.xml;type=text/xml" -F "bcodeB=@defaultBarcodeB.txt;type=text/plain" -F "bcodeA=@defaultBarcodeA.txt;type=text/plain"`
+if (( `stat -c%s out1.ngchm` < 1024 )); then
+  echo "Test 6 failed!";
+  exit 1
+fi
+
 echo -e "\n\nTests Passed!"
